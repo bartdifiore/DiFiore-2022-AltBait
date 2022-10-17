@@ -1,4 +1,4 @@
-# Alternative Bait for the American lobster fishery
+# Alternative bait for the American lobster fishery
 
 ### PI's: Adrian Jordaan, Brian Cheng, Amanda Kinchla, and Jynessa Dutka-Gianelli
 
@@ -16,14 +16,16 @@ The overall goal of the sampling in summer 2022 was to trial different prototype
 
 We conducted the trials using commercial-style lobster traps (3', single parlor constuction) deployed in a paired design, with a control trap (herring bait) set within ~20 m of each alternative bait trap. Traps were hauled approximately every three nights when deployed with alternative. All traps were set within 2 km of the Gloucester Marine station in the areas locally known as Hodgkins Point and "the ledges" off of Plum Cove beach. Depth ranged from 15-55'. We took care to set trap pairs at similar depths and proximities to structure. For example if setting on a small rock outcropping, we would set one trap on either side of the boulder at similar depths.<br>
 
-When hauling traps, we recorded the number and size class of each lobster. Size classes followed commercial fishing regulations of carapace length and reproductive status (short (< 3.25"), keeper (3.25-5"), egged female, and jumbo (>5")). We also recorded the number of crabs and fish caught in each trap. If a jumbo lobster had eggs it was recorded as an egged female.<br>
+When hauling traps, we recorded the number and size class of each lobster. Size classes followed commercial fishing regulations of carapace length and reproductive status (short (< 3.25"), keeper (3.25-5"), egged female, v-notched female, and jumbo (>5")). We also recorded the number of crabs and fish caught in each trap. If a jumbo lobster had eggs or was v-notched it was recorded as an egged or v-notched female.<br>
 
-We purchased herring bait from CapeAnn Lobstermen, and it was previously frozen from the Faroe Islands. Herring were large, and unless otherwise noted in the dataset, we used two defrosted herring in each bait bag (~0.3-0.6 kg). All bait was fished in large mesh traditional-style bait bags hung in the trap's kitchen from a bait cleat. Only bait that had been defrosted once was used in the trials.<br>
+We purchased previously frozen herring bait landed in the Faroe Islands from CapeAnn Lobstermen. Herring were large, and unless otherwise noted in the dataset, we used two defrosted herring in each bait bag (~0.3-0.6 kg). All bait (herring and alternative) was fished in large mesh traditional-style bait bags hung in the trap's kitchen from a bait cleat. Only bait that had been defrosted once was used in the trials.<br>
 
 
 ## Metadata
 
 ### Rawdata_20221017.csv
+
+This file contains all observations from the core sampling conducted in summer 2022. 
 
 Location - The general geographic area where a trap was set.<br>
 Trap_pair - Unique identifier of each trap pair. Two taps were lost over the course of the season, and the remaining traps were paired. However, we retain the original trap pair numbering for consistency in the dataset.<br>
