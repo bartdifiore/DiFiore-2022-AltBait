@@ -49,4 +49,6 @@ Green_crab - number of green crabs (*Carcinus maenas*)<br>
 Bait_remaining - % of bait remaining estimated visually by BD<br>
 Notes - any notes associated with the haul. Fish species and number were recorded under notes.<br>
 
+### InitialSet.csv
 
+This is an ancilary dataset collected based on an initial deployment in late May 2022. It is provided only for future reference and should not be analyzed with the broader dataset. Traps were deployed at the mouth of the  
