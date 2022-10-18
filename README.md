@@ -51,4 +51,4 @@ Notes - any notes associated with the haul. Fish species and number were recorde
 
 ### InitialSet.csv
 
-This is an ancilary dataset collected based on an initial deployment in late May 2022. It is provided only for future reference and should not be analyzed with the broader dataset. Traps were deployed at the mouth of the  
+This is an ancilary dataset collected based on an initial deployment in late May 2022. It is provided only for future reference and should not be analyzed with the broader dataset. Traps were deployed for one set at the mouth of the Annisquam River.
