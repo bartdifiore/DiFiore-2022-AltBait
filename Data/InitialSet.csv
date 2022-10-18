@@ -1,0 +1,21 @@
+Location,Buoy_number,Bait_type,Amount,Date_set,Time_set,Date_retrieved,Time_retrieved,Catch (lobsters),Set_notes,Retrieve_notes
+Spindel,R1,Traditional,3,6/22/22,715,6/23/22,1830,0,"Baited with a mix of pollock, cunners, and mackerel. Amount is number of fish. ","some bait remaining, mainly bones. Lots of green crabs"
+Spindel,R2,Alternative - B1.2,201.6,6/22/22,715,6/23/22,1830,0,"Amount in grams, approximated posthoc based on the weight of a single cube. Placed 7 cubes of each bait in a bag.","1 rock crab, no bait remaining"
+Spindel,R2,Alternative - B3,208.6,6/22/22,715,6/23/22,1830,0,"Amount in grams, approximated posthoc based on the weight of a single cube. Placed 7 cubes of each bait in a bag.","1 rock crab, no bait remaining"
+Spindel,R2,Alternative - B1.1,206.5,6/22/22,715,6/23/22,1830,0,"Amount in grams, approximated posthoc based on the weight of a single cube. Placed 7 cubes of each bait in a bag.","1 rock crab, no bait remaining"
+Spindel,R2,Alternative - B1.2,182.7,6/22/22,715,6/23/22,1830,0,"Amount in grams, approximated posthoc based on the weight of a single cube. Placed 7 cubes of each bait in a bag.","1 rock crab, no bait remaining"
+Spindel,R2,Alternative - Cylinder bait,NA,6/22/22,715,6/23/22,1830,0,"unknown weight, these were the cylindrical baits. Placed two in a bag.","1 rock crab, no bait remaining"
+Spindel,R7,Traditional,3,6/22/22,745,6/23/22,1830,0,"Baited with a mix of pollock, cunners, and mackerel. Amount is number of fish. ","some bait remaining, mainly bones. Lots of green crabs."
+Spindel,R5,Alternative - B1.2,201.6,6/22/22,745,6/23/22,1830,0,"Amount in grams, approximated posthoc based on the weight of a single cube. Placed 7 cubes of each bait in a bag.","1 rock crab, no bait remaining"
+Spindel,R5,Alternative - B3,208.6,6/22/22,745,6/23/22,1830,0,"Amount in grams, approximated posthoc based on the weight of a single cube. Placed 7 cubes of each bait in a bag.","1 rock crab, no bait remaining"
+Spindel,R5,Alternative - B1.1,206.5,6/22/22,745,6/23/22,1830,0,"Amount in grams, approximated posthoc based on the weight of a single cube. Placed 7 cubes of each bait in a bag.","1 rock crab, no bait remaining"
+Spindel,R5,Alternative - B1.2,182.7,6/22/22,745,6/23/22,1830,0,"Amount in grams, approximated posthoc based on the weight of a single cube. Placed 7 cubes of each bait in a bag.","1 rock crab, no bait remaining"
+Spindel,R5,Alternative - Cylinder bait,NA,6/22/22,745,6/23/22,1830,0,"unknown weight, these were the cylindrical baits. Placed two in a bag.","1 rock crab, no bait remaining"
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,37,,,
