@@ -1,0 +1,185 @@
+---
+title: "Alternative bait for the American lobster fishery"
+subtitle: "2022 Field sampling report"
+author: "Bart DiFiore"
+date: "10/19/2022"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, include = T, warning = F)
+```
+
+```{r getdata, include = F, echo = F, warning=F}
+
+library(tidyverse)
+library(lme4)
+library(lmerTest)
+library(DHARMa)
+library(glmmTMB)
+
+df <- read.csv("Data/Rawdata_20221017.csv") %>%
+  janitor::clean_names() %>%
+  mutate(across(location:alternative_label, as.factor)) %>%
+  drop_na(bait_type)
+
+```
+
+## Preliminary results
+
+### Catch rates
+
+```{r summary_stats, echo = F, include = F, warning = F}
+
+df %>% group_by(bait_type) %>%
+  summarize(mean_catch = mean(lobster, na.rm = T),
+            sd_catch = sd(lobster, na.rm = T),
+            total_catch = sum(lobster, na.rm = T)
+  )
+
+df %>% group_by(bait_type) %>%
+  tidybayes::mean_qi(lobster, na.rm = T)
+
+
+df %>% group_by(bait_type) %>%
+  summarize(mean_catch = mean(num_legalsize, na.rm = T),
+            sd_catch = sd(num_legalsize, na.rm = T),
+            total_catch = sum(num_legalsize, na.rm = T),
+            n = n()
+  )
+
+0.545/0.0756
+
+
+```
+
+Across all alternative bait prototypes, herring was 3.23 times more effective at catching lobster than the alternative baits (Fig. 1a). On average, traps baited with herring caught $3.18 \pm 2.8 (\bar{X} \pm 1 SD)$ ind. per haul, while traps baited with the alternative caught $0.98 \pm 2.8$. The discrepency was even larger for legal sized lobster; herring caught ~7.2 times more legal lobsters than the alternative per haul. Across 128 trap pulls, we caught only 9 legal sized lobster using the alternative (Fig. 1b).
+
+I conducted some preliminary modeling of the data using some simple glmers. Because we consistently varied the prototypes trial-to-trial, I made the assumption that all of the alternatives caught at the same rate. I modeled catch per haul as a function of bait type (a categorical predictor) and the number of nights that a trap was deployed. I also included a random effect for trap pair and assumed a negative binomial distribution to the errors using the glmmTMB package in R. The predicted values (black points) in Figure 1 represent mean predictions from the model assuming a three night deployment. Based on some initial model evaluation, the model appears to fit the data well, and there were obvious significant differences between herring and alternative traps. The length of the deployment was also negatively correlated with the total number of lobsters caught (but see Fig. 3b, as it is more likely that this is not a linear relationship). 
+
+```{r modeling, include = F, warning=F, echo = F}
+
+mod1 <- glm(lobster ~ bait_type, data = df, family = "poisson")
+summary(mod1)
+out1 <- ggeffects::ggpredict(mod1)
+plot(out1)
+hist(residuals(mod1))
+resids <- DHARMa::simulateResiduals(mod1)
+plot(resids)
+
+library(lme4)
+library(lmerTest)
+library(glmmTMB)
+mod2 <- glmmTMB(lobster ~ bait_type + deployment_nights + (1|trap_pair), df, family = nbinom2(link = "log"))
+summary(mod2)
+resids2 <- DHARMa::simulateResiduals(mod2)
+plot(resids2) # looks pretty darn good
+
+out2 <- ggeffects::ggpredict(mod2, terms = "bait_type")
+plot(out2)
+
+out2 <- as.data.frame(out2)
+
+p1 <- df %>%
+  group_by(bait_type) %>%
+  filter(bait_type != "") %>%
+  ggplot()+
+  geom_jitter(aes(x = bait_type, y = lobster, color = bait_type), show.legend = F, height = 0, width = 0.2)+
+  geom_point(data = out2, aes(x = x, y = predicted), size = 4)+
+  geom_linerange(data = out2, aes(x = x, ymin = conf.low, ymax = conf.high))+
+  labs(y = "Number of lobster (per haul)", x = "")+
+  cowplot::theme_cowplot()
+
+
+
+mod3 <- glmmTMB(num_legalsize ~ bait_type + deployment_nights + (1|trap_pair), df, family = nbinom2(link = "log"))
+summary(mod3)
+resids2 <- DHARMa::simulateResiduals(mod3)
+plot(resids2) # looks pretty darn good
+
+out3 <- ggeffects::ggpredict(mod3, terms = "bait_type")
+plot(out3)
+out3 <- as.data.frame(out3)
+
+p2 <- df %>%
+  group_by(bait_type) %>%
+  filter(bait_type != "") %>%
+  ggplot()+
+  geom_jitter(aes(x = bait_type, y = num_legalsize, color = bait_type), show.legend = F, height = 0, width = 0.2)+
+  geom_point(data = out3, aes(x = x, y = predicted), size = 4)+
+  geom_linerange(data = out3, aes(x = x, ymin = conf.low, ymax = conf.high))+
+  labs(y = "Number of legal lobster (per haul)", x = "")+
+  cowplot::theme_cowplot()
+
+```
+
+```{r model_plot, include = T, warning = F, fig.cap="Figure 1. Total number of lobster caught per haul (A) and number of legal lobsters caught her haul (B) over the season. Data are the observed catches. Black points are mean predictions +- 95% CI's from a generalized linear mixed effects model."}
+cowplot::plot_grid(p1, p2, align = "h")
+```
+
+As an alternative way of viewing the data, I also calculated the difference in catch between each trap pair across all hauls in the season. Out of 122 trap hauls where we could directly compare, the alternative outfished herring in only 9 instances (Fig. 2).
+
+```{r histo, include = T, warning=F, message=F, fig.cap="Figure 2. Difference in lobster catch between the alternative and herring among each trap pair. Negative values represent the number of lobster that the herring trap caught over the alternative trap."}
+temp <- df %>% 
+  select(trap_pair, date_retrieved, bait_type, lobster) %>%
+  mutate(id = 1:n()) %>%
+  group_by(trap_pair, date_retrieved, bait_type) %>%
+  summarize(total_catch = sum(lobster, na.rm = T)) %>%
+  pivot_wider(names_from = bait_type, values_from = total_catch) %>%
+  mutate(ratio = Alt/Herring, 
+         diff = Alt-Herring)
+
+ggplot(temp, aes(x = diff))+
+  geom_histogram(breaks = c(-Inf, seq(-10, 0, by = 1), 1, 2, 3,4, Inf), fill = "gray70", color = "black")+
+  geom_vline(xintercept = 0, linetype = 4, lwd = 2)+
+  annotate(geom = "text", x = c(-8, 2), y = c(15, 15), label = c("Alternative caught\nless than herring", "Alternative caught\nmore than herring"))+
+  labs(x = "Difference in catch between trap pairs\n(alternative-herring)", y = "Count")+
+  theme_classic()
+```
+
+
+### Degredation rates
+
+One of the largest issues we had with the carrageenan-based alternative was its rapid degredation rate (Fig. 3a). In almost all instances the carrageenan baits were gone after 3 days, and when we checked traps after one night there was almost no bait remaining. While this is complete conjecture, herring outfished the alternative 3:1. However, the data suggests that the alternative was only fishing for one night. Therefore, if we could get the alternative to fish for 3 nights we might be able to match the catch rate of herring bait. 
+
+```{r degradation_rates, include = T, message=F, warning=F, fig.cap = "Figure 3. Average amount of bait remaining (left) and average lobster catch (B) of traps as a function of deployment time. Both responses were estimated as the average of all traps hauled after the specified time interval of a particular bait type. One note of caution is that the sample size differs widely between the different deployment times, because most traps were hauled after three nights."}
+
+dummy <- data.frame(distinct(df, bait_type), deployment_nights = 0, mean_remaining = 100)
+
+p1 <- df %>%
+  group_by(bait_type, deployment_nights) %>%
+  filter(alternative_label != "B3") %>%
+  summarize(mean_remaining = mean(bait_remaining, na.rm = T)) %>%
+  bind_rows(dummy) %>%
+  ggplot(aes(x = deployment_nights, y = mean_remaining))+
+  geom_line(aes(color = bait_type), lwd = 2)+
+  scale_color_manual(values = c("pink", "darkred", "forestgreen", "darkblue"))+
+  scale_x_continuous(breaks = c(0, 1, 3, 5, 10))+
+  labs(y = "Mean bait remaining (%)", x = "Deployment time (days)")+
+  theme_classic()
+
+
+dummy <- data.frame(distinct(df, bait_type), deployment_nights = 0, mean_catch = 0)
+
+p2 <- df %>%
+  group_by(bait_type, deployment_nights) %>%
+  summarize(mean_catch= mean(lobster, na.rm = T)) %>%
+  bind_rows(dummy) %>%
+  ggplot(aes(x = deployment_nights, y = mean_catch))+
+  geom_line(aes(color = bait_type), lwd = 2)+
+  scale_color_manual(values = c("pink", "darkred", "forestgreen", "darkblue"))+
+  scale_x_continuous(breaks = c(0, 1, 3, 5, 10))+
+  labs(y = "Mean lobster catch (ind./haul)", x = "Deployment time (days)")+
+  theme_classic()
+
+cowplot::plot_grid(p1 + theme(legend.position = "none"), p2, nrow = 1)
+
+
+```
+
+
+## Recommendations
+
+The major takeaway for me from this summer sampling was that **neptunes harvest appears to be an effective attractant of lobster**. However, our prototypes to date are delivering the attractant in a way that is not yet a viable bait. Moving forward, I believe that the biggest area we need to focus on is increasing both the gel strength and the gurry concentration in the prototypes. I believe that if we had a bait where ~5-20 percent remained after 3 nights even with the current gurry concentrations, we would be able to move into larger field trials on commercial boats without captains being at risk of significant economic losses. Furthermore, if we were able to double the volume of gurry (either through larger or more concentrated baits), then the catch rates would be comparible to catch rates on commercial boats fishing pogies, redfish, etc.
