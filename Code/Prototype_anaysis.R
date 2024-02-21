@@ -2,7 +2,7 @@ library(tidyverse)
 
 
 
-df <- read.csv("~/Downloads/Rawdata_2022 - Sheet1 (2).csv") %>% 
+df <- read.csv("Data/Rawdata_20230731.csv") %>% 
   janitor::clean_names()
 
 
@@ -35,7 +35,7 @@ df %>% group_by(bait_type) %>%
   labs(x = "Bait type", y = "Catch", title = "Lobster catch")+
   theme_classic()
 
-ggsave(filename = "~/Google Drive/Stier Lab/People/Bart DiFiore/Projects/AlternativeBait/Figures/plot1_v2.png" ,width = 5, height = 3.5)
+ggsave(filename = "Figures/plot1_v3.png" ,width = 5, height = 3.5)
 
 
 
@@ -96,7 +96,7 @@ formod <- filter(df, bait_type != "")
 mod1 <- glm(lobster ~ bait_type, data = formod, family = "poisson")
 summary(mod1)
 out1 <- ggeffects::ggpredict(mod1)
-plot(out)
+plot(out1)
 hist(residuals(mod1))
 
 out1 <- data.frame(out1)
@@ -170,8 +170,14 @@ df %>%
 
 
 
-
-
+#---------------------------------------
+## updated 7/31
+#---------------------------------------
+  
+#normalize by deployment time
+  
+df %>%
+  as_tibble()
 
 
 
